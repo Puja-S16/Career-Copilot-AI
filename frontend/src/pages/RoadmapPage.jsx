@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Navigation from "../components/Navigation";
 import Roadmap from "../components/Roadmap";
 import { generateRoadmap } from "../services/api";
@@ -9,6 +10,7 @@ function RoadmapPage() {
     const [loading, setLoading] = useState(true);
 
     const token = localStorage.getItem("access_token");
+    const navigate = useNavigate();
 
     useEffect(() => {
         const loadRoadmap = async () => {
@@ -33,7 +35,9 @@ function RoadmapPage() {
 
                 setRoadmap(data);
             } catch (error) {
-                setMessage(error.message);
+                setMessage(
+                    error.message || "Roadmap generation failed."
+                );
             } finally {
                 setLoading(false);
             }
@@ -75,9 +79,35 @@ function RoadmapPage() {
                 )}
 
                 {!loading && roadmap && (
-                    <Roadmap
-                        roadmap={roadmap}
-                    />
+                    <>
+                        <Roadmap
+                            roadmap={roadmap}
+                        />
+
+                        <div className="analysis-actions">
+
+                            <button
+                                className="action-button"
+                                onClick={() =>
+                                    navigate("/gap-analysis")
+                                }
+                            >
+                                View Gap Analysis
+                            </button>
+
+                            <button
+                                className="action-button"
+                                onClick={() =>
+                                    navigate(
+                                        "/resume-improvement"
+                                    )
+                                }
+                            >
+                                Improve Resume
+                            </button>
+
+                        </div>
+                    </>
                 )}
 
             </main>

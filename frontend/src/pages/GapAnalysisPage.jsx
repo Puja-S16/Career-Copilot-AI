@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Navigation from "../components/Navigation";
 import GapAnalysis from "../components/GapAnalysis";
 import { getGapAnalysis } from "../services/api";
@@ -9,6 +10,7 @@ function GapAnalysisPage() {
     const [loading, setLoading] = useState(true);
 
     const token = localStorage.getItem("access_token");
+    const navigate = useNavigate();
 
     useEffect(() => {
         const loadGapAnalysis = async () => {
@@ -32,7 +34,9 @@ function GapAnalysisPage() {
 
                 setGapAnalysis(data);
             } catch (error) {
-                setMessage(error.message);
+                setMessage(
+                    error.message || "Gap analysis failed."
+                );
             } finally {
                 setLoading(false);
             }
@@ -73,9 +77,35 @@ function GapAnalysisPage() {
                 )}
 
                 {!loading && gapAnalysis && (
-                    <GapAnalysis
-                        gapAnalysis={gapAnalysis}
-                    />
+                    <>
+                        <GapAnalysis
+                            gapAnalysis={gapAnalysis}
+                        />
+
+                        <div className="analysis-actions">
+
+                            <button
+                                className="action-button"
+                                onClick={() =>
+                                    navigate("/roadmap")
+                                }
+                            >
+                                View Career Roadmap
+                            </button>
+
+                            <button
+                                className="action-button"
+                                onClick={() =>
+                                    navigate(
+                                        "/resume-improvement"
+                                    )
+                                }
+                            >
+                                Improve Resume
+                            </button>
+
+                        </div>
+                    </>
                 )}
 
             </main>

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Navigation from "../components/Navigation";
 import ResumeImprovement from "../components/ResumeImprovement";
 import { getResumeImprovements } from "../services/api";
@@ -9,6 +10,7 @@ function ResumeImprovementPage() {
     const [loading, setLoading] = useState(true);
 
     const token = localStorage.getItem("access_token");
+    const navigate = useNavigate();
 
     useEffect(() => {
         const loadResumeImprovement = async () => {
@@ -32,7 +34,10 @@ function ResumeImprovementPage() {
 
                 setResumeImprovement(data);
             } catch (error) {
-                setMessage(error.message);
+                setMessage(
+                    error.message ||
+                    "Resume improvement analysis failed."
+                );
             } finally {
                 setLoading(false);
             }
@@ -61,8 +66,8 @@ function ResumeImprovementPage() {
                     <section className="welcome-card">
                         <h2>Generating Resume Suggestions...</h2>
                         <p>
-                            Reviewing your resume against the target
-                            role.
+                            Reviewing your resume against the
+                            target role.
                         </p>
                     </section>
                 )}
@@ -74,9 +79,42 @@ function ResumeImprovementPage() {
                 )}
 
                 {!loading && resumeImprovement && (
-                    <ResumeImprovement
-                        improvements={resumeImprovement}
-                    />
+                    <>
+                        <ResumeImprovement
+                            improvements={resumeImprovement}
+                        />
+
+                        <div className="analysis-actions">
+
+                            <button
+                                className="action-button"
+                                onClick={() =>
+                                    navigate("/analysis")
+                                }
+                            >
+                                View Analysis
+                            </button>
+
+                            <button
+                                className="action-button"
+                                onClick={() =>
+                                    navigate("/gap-analysis")
+                                }
+                            >
+                                View Gap Analysis
+                            </button>
+
+                            <button
+                                className="action-button"
+                                onClick={() =>
+                                    navigate("/roadmap")
+                                }
+                            >
+                                View Career Roadmap
+                            </button>
+
+                        </div>
+                    </>
                 )}
 
             </main>

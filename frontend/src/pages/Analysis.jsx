@@ -50,12 +50,34 @@ function Analysis() {
                         </button>
                     </section>
                 ) : (
-                    <AnalysisResult
-                        analysis={analysis}
-                        onGapAnalysis={() =>
-                            navigate("/gap-analysis")
-                        }
-                    />
+                    <>
+                        <AnalysisResult
+                            analysis={analysis}
+                            onGapAnalysis={() =>
+                                navigate("/gap-analysis")
+                            }
+                        />
+
+                        <div className="analysis-actions">
+
+                            <button
+                                className="action-button"
+                                onClick={() => navigate("/roadmap")}
+                            >
+                                View Career Roadmap
+                            </button>
+
+                            <button
+                                className="action-button"
+                                onClick={() =>
+                                    navigate("/resume-improvement")
+                                }
+                            >
+                                View Resume Improvements
+                            </button>
+
+                        </div>
+                    </>
                 )}
 
             </main>
