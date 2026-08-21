@@ -6,6 +6,7 @@ import { generateRoadmap } from "../services/api";
 function RoadmapPage() {
     const [roadmap, setRoadmap] = useState(null);
     const [message, setMessage] = useState("");
+    const [loading, setLoading] = useState(true);
 
     const token = localStorage.getItem("access_token");
 
@@ -16,16 +17,13 @@ function RoadmapPage() {
             );
 
             if (!savedAnalysis) {
-                setMessage(
-                    "Please analyze a job first."
-                );
+                setMessage("Please analyze a job first.");
+                setLoading(false);
                 return;
             }
 
             try {
-                const analysis = JSON.parse(
-                    savedAnalysis
-                );
+                const analysis = JSON.parse(savedAnalysis);
 
                 const data = await generateRoadmap(
                     analysis.analysis_id,
@@ -36,6 +34,8 @@ function RoadmapPage() {
                 setRoadmap(data);
             } catch (error) {
                 setMessage(error.message);
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -58,13 +58,23 @@ function RoadmapPage() {
 
             <main className="dashboard-content">
 
-                {message && (
+                {loading && (
+                    <section className="welcome-card">
+                        <h2>Generating Career Roadmap...</h2>
+                        <p>
+                            Creating your personalized 14-day
+                            learning plan.
+                        </p>
+                    </section>
+                )}
+
+                {!loading && message && (
                     <p className="message">
                         {message}
                     </p>
                 )}
 
-                {roadmap && (
+                {!loading && roadmap && (
                     <Roadmap
                         roadmap={roadmap}
                     />

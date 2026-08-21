@@ -8,6 +8,7 @@ function JobAnalysisForm({
     onUpload,
     onAnalyze,
     isUploading,
+    isAnalyzing,
 }) {
     return (
         <section className="analysis-card">
@@ -20,15 +21,20 @@ function JobAnalysisForm({
                 <input
                     type="file"
                     accept=".pdf"
-                    onChange={(e) => setResume(e.target.files[0])}
+                    onChange={(e) =>
+                        setResume(e.target.files[0])
+                    }
+                    disabled={isUploading || isAnalyzing}
                 />
             </div>
 
             <button
                 onClick={onUpload}
-                disabled={isUploading}
+                disabled={isUploading || isAnalyzing}
             >
-                {isUploading ? "Uploading..." : "Upload Resume"}
+                {isUploading
+                    ? "Uploading..."
+                    : "Upload Resume"}
             </button>
 
             <div className="form-group">
@@ -38,7 +44,10 @@ function JobAnalysisForm({
                     type="text"
                     placeholder="e.g. Software Engineer"
                     value={jobTitle}
-                    onChange={(e) => setJobTitle(e.target.value)}
+                    onChange={(e) =>
+                        setJobTitle(e.target.value)
+                    }
+                    disabled={isAnalyzing}
                 />
             </div>
 
@@ -49,12 +58,20 @@ function JobAnalysisForm({
                     rows="10"
                     placeholder="Paste the job description here..."
                     value={jobDescription}
-                    onChange={(e) => setJobDescription(e.target.value)}
+                    onChange={(e) =>
+                        setJobDescription(e.target.value)
+                    }
+                    disabled={isAnalyzing}
                 />
             </div>
 
-            <button onClick={onAnalyze}>
-                Analyze Job
+            <button
+                onClick={onAnalyze}
+                disabled={isUploading || isAnalyzing}
+            >
+                {isAnalyzing
+                    ? "Analyzing..."
+                    : "Analyze Job"}
             </button>
 
         </section>

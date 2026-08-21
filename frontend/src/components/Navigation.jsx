@@ -2,10 +2,12 @@ import { NavLink } from "react-router-dom";
 
 function Navigation() {
     return (
-        <nav className="navigation">
+        <aside className="navigation">
 
             <div className="navigation-brand">
-                <div className="brand-icon">CC</div>
+                <div className="brand-icon">
+                    CC
+                </div>
 
                 <div>
                     <h2>Career Copilot</h2>
@@ -15,33 +17,63 @@ function Navigation() {
 
             <div className="navigation-links">
 
-                <NavLink to="/dashboard">
-                    Dashboard
+                <NavLink
+                    to="/dashboard"
+                    className={({ isActive }) =>
+                        isActive ? "nav-link active" : "nav-link"
+                    }
+                >
+                    <span>Dashboard</span>
                 </NavLink>
 
-                <NavLink to="/new-analysis">
-                    New Analysis
+                <NavLink
+                    to="/new-analysis"
+                    className={({ isActive }) =>
+                        isActive ? "nav-link active" : "nav-link"
+                    }
+                >
+                    <span>New Analysis</span>
                 </NavLink>
 
-                <NavLink to="/analysis">
-                    Analysis
+                <NavLink
+                    to="/analysis"
+                    className={({ isActive }) =>
+                        isActive ? "nav-link active" : "nav-link"
+                    }
+                >
+                    <span>Analysis</span>
                 </NavLink>
 
-                <NavLink to="/gap-analysis">
-                    Gap Analysis
+                <NavLink
+                    to="/gap-analysis"
+                    className={({ isActive }) =>
+                        isActive ? "nav-link active" : "nav-link"
+                    }
+                >
+                    <span>Gap Analysis</span>
                 </NavLink>
 
-                <NavLink to="/roadmap">
-                    Career Roadmap
+                <NavLink
+                    to="/roadmap"
+                    className={({ isActive }) =>
+                        isActive ? "nav-link active" : "nav-link"
+                    }
+                >
+                    <span>Career Roadmap</span>
                 </NavLink>
 
-                <NavLink to="/resume-improvement">
-                    Resume Improvement
+                <NavLink
+                    to="/resume-improvement"
+                    className={({ isActive }) =>
+                        isActive ? "nav-link active" : "nav-link"
+                    }
+                >
+                    <span>Resume Improvement</span>
                 </NavLink>
 
             </div>
 
-        </nav>
+        </aside>
     );
 }
 

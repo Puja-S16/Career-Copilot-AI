@@ -6,6 +6,7 @@ import { getResumeImprovements } from "../services/api";
 function ResumeImprovementPage() {
     const [resumeImprovement, setResumeImprovement] = useState(null);
     const [message, setMessage] = useState("");
+    const [loading, setLoading] = useState(true);
 
     const token = localStorage.getItem("access_token");
 
@@ -17,6 +18,7 @@ function ResumeImprovementPage() {
 
             if (!savedAnalysis) {
                 setMessage("Please analyze a job first.");
+                setLoading(false);
                 return;
             }
 
@@ -31,6 +33,8 @@ function ResumeImprovementPage() {
                 setResumeImprovement(data);
             } catch (error) {
                 setMessage(error.message);
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -53,13 +57,23 @@ function ResumeImprovementPage() {
 
             <main className="dashboard-content">
 
-                {message && (
+                {loading && (
+                    <section className="welcome-card">
+                        <h2>Generating Resume Suggestions...</h2>
+                        <p>
+                            Reviewing your resume against the target
+                            role.
+                        </p>
+                    </section>
+                )}
+
+                {!loading && message && (
                     <p className="message">
                         {message}
                     </p>
                 )}
 
-                {resumeImprovement && (
+                {!loading && resumeImprovement && (
                     <ResumeImprovement
                         improvements={resumeImprovement}
                     />

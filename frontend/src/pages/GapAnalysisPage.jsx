@@ -6,6 +6,7 @@ import { getGapAnalysis } from "../services/api";
 function GapAnalysisPage() {
     const [gapAnalysis, setGapAnalysis] = useState(null);
     const [message, setMessage] = useState("");
+    const [loading, setLoading] = useState(true);
 
     const token = localStorage.getItem("access_token");
 
@@ -16,16 +17,13 @@ function GapAnalysisPage() {
             );
 
             if (!savedAnalysis) {
-                setMessage(
-                    "Please analyze a job first."
-                );
+                setMessage("Please analyze a job first.");
+                setLoading(false);
                 return;
             }
 
             try {
-                const analysis = JSON.parse(
-                    savedAnalysis
-                );
+                const analysis = JSON.parse(savedAnalysis);
 
                 const data = await getGapAnalysis(
                     analysis.analysis_id,
@@ -35,6 +33,8 @@ function GapAnalysisPage() {
                 setGapAnalysis(data);
             } catch (error) {
                 setMessage(error.message);
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -57,13 +57,22 @@ function GapAnalysisPage() {
 
             <main className="dashboard-content">
 
-                {message && (
+                {loading && (
+                    <section className="welcome-card">
+                        <h2>Loading Gap Analysis...</h2>
+                        <p>
+                            Please wait while we analyze your skill gaps.
+                        </p>
+                    </section>
+                )}
+
+                {!loading && message && (
                     <p className="message">
                         {message}
                     </p>
                 )}
 
-                {gapAnalysis && (
+                {!loading && gapAnalysis && (
                     <GapAnalysis
                         gapAnalysis={gapAnalysis}
                     />

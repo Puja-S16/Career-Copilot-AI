@@ -13,6 +13,7 @@ function NewAnalysis() {
     const [jobDescription, setJobDescription] = useState("");
     const [message, setMessage] = useState("");
     const [resumeId, setResumeId] = useState(null);
+
     const [isUploading, setIsUploading] = useState(false);
     const [isAnalyzing, setIsAnalyzing] = useState(false);
 
@@ -29,25 +30,33 @@ function NewAnalysis() {
         setMessage("");
 
         try {
-            const data = await uploadResume(resume, token);
+            const data = await uploadResume(
+                resume,
+                token
+            );
 
             setResumeId(data.resume_id);
 
             setMessage(
-                `Resume uploaded successfully. Resume ID: ${data.resume_id}`
+                "Resume uploaded successfully. You can now analyze the job."
             );
         } catch (error) {
-            setMessage(error.message);
+            setMessage(
+                error.message || "Resume upload failed."
+            );
         } finally {
             setIsUploading(false);
         }
     };
 
     const handleAnalyze = async () => {
-        if (!jobTitle || !jobDescription) {
-            setMessage(
-                "Please enter job title and job description."
-            );
+        if (!jobTitle.trim()) {
+            setMessage("Please enter a job title.");
+            return;
+        }
+
+        if (!jobDescription.trim()) {
+            setMessage("Please enter a job description.");
             return;
         }
 
@@ -74,7 +83,9 @@ function NewAnalysis() {
 
             navigate("/analysis");
         } catch (error) {
-            setMessage(error.message);
+            setMessage(
+                error.message || "Job analysis failed."
+            );
         } finally {
             setIsAnalyzing(false);
         }
