@@ -1,152 +1,25 @@
-import { useState } from "react";
-import AnalysisResult from "../components/AnalysisResult";
-import GapAnalysis from "../components/GapAnalysis";
-import JobAnalysisForm from "../components/JobAnalysisForm";
-import {
-    uploadResume,
-    analyzeJob,
-    getGapAnalysis,
-    generateRoadmap,
-    getResumeImprovements,
-} from "../services/api";
-import Roadmap from "../components/Roadmap";
-import ResumeImprovement from "../components/ResumeImprovement";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Navigation from "../components/Navigation";
 
 function Dashboard() {
-    const [resume, setResume] = useState(null);
-    const [jobTitle, setJobTitle] = useState("");
-    const [jobDescription, setJobDescription] = useState("");
-    const [message, setMessage] = useState("");
     const [analysis, setAnalysis] = useState(null);
-    const [resumeId, setResumeId] = useState(null);
-    const [gapAnalysis, setGapAnalysis] = useState(null);
-    const [roadmap, setRoadmap] = useState(null);
-    const [resumeImprovement, setResumeImprovement] = useState(null);
-    const [isUploading, setIsUploading] = useState(false);
-    const [isAnalyzing, setIsAnalyzing] = useState(false);
-    const [isGeneratingRoadmap, setIsGeneratingRoadmap] = useState(false);
+    const navigate = useNavigate();
 
-    const token = localStorage.getItem("access_token");
+    useEffect(() => {
+        const savedAnalysis = localStorage.getItem(
+            "current_analysis"
+        );
 
-    const handleGapAnalysis = async () => {
-        if (!analysis) {
-            setMessage("Please analyze a job first.");
-            return;
+        if (savedAnalysis) {
+            setAnalysis(JSON.parse(savedAnalysis));
         }
-
-        setMessage("");
-
-        try {
-            const data = await getGapAnalysis(
-                analysis.analysis_id,
-                token
-            );
-
-            setGapAnalysis(data);
-        } catch (error) {
-            setMessage(error.message);
-        }
-    };
-
-    const handleRoadmap = async () => {
-        if (!analysis) {
-            setMessage("Please analyze a job first.");
-            return;
-        }
-
-        setMessage("");
-
-        try {
-            const data = await generateRoadmap(
-                analysis.analysis_id,
-                14,
-                token
-            );
-
-            setRoadmap(data);
-        } catch (error) {
-            setMessage(error.message);
-        }
-    };
-
-    const handleResumeImprovement = async () => {
-        if (!analysis) {
-            setMessage("Please analyze a job first.");
-            return;
-        }
-
-        setMessage("");
-
-        try {
-            const data = await getResumeImprovements(
-                analysis.analysis_id,
-                token
-            );
-
-            setResumeImprovement(data);
-        } catch (error) {
-            setMessage(error.message);
-        }
-    };
-
-    const handleAnalyze = async () => {
-        if (!jobTitle || !jobDescription) {
-            setMessage("Please enter job title and job description.");
-            return;
-        }
-
-        if (!resumeId) {
-            setMessage("Please upload your resume first.");
-            return;
-        }
-
-        setMessage("");
-
-        try {
-            const data = await analyzeJob(
-                resumeId,
-                jobTitle,
-                jobDescription,
-                token
-            );
-
-            setAnalysis(data);
-            setGapAnalysis(null);
-            setMessage("Analysis completed successfully!");
-        } catch (error) {
-            setMessage(error.message);
-        }
-    };
-
-    const handleUpload = async () => {
-        if (!resume) {
-            setMessage("Please select a resume first.");
-            return;
-        }
-
-        setIsUploading(true);
-        setMessage("");
-
-        try {
-            const data = await uploadResume(
-                resume,
-                token
-            );
-
-            setResumeId(data.resume_id);
-
-            setMessage(
-                `Resume uploaded successfully. Resume ID: ${data.resume_id}`
-            );
-        } catch (error) {
-            setMessage(error.message);
-        } finally {
-            setIsUploading(false);
-        }
-    };
+    }, []);
 
     const handleLogout = () => {
         localStorage.removeItem("access_token");
+        localStorage.removeItem("current_analysis");
+
         window.location.reload();
     };
 
@@ -156,7 +29,9 @@ function Dashboard() {
             <header className="dashboard-header">
                 <div>
                     <h1>Career Copilot</h1>
-                    <p>Your AI-powered career assistant</p>
+                    <p>
+                        Your AI-powered career assistant
+                    </p>
                 </div>
 
                 <button onClick={handleLogout}>
@@ -164,78 +39,127 @@ function Dashboard() {
                 </button>
             </header>
 
+            <Navigation />
+
             <main className="dashboard-content">
 
                 <section className="welcome-card">
                     <h2>Welcome back 👋</h2>
 
                     <p>
-                        Upload your resume and enter a job description
-                        to analyze your career match.
+                        Analyze job opportunities, identify skill
+                        gaps, create learning roadmaps, and improve
+                        your resume.
                     </p>
                 </section>
 
-                <JobAnalysisForm
-                    resume={resume}
-                    setResume={setResume}
-                    jobTitle={jobTitle}
-                    setJobTitle={setJobTitle}
-                    jobDescription={jobDescription}
-                    setJobDescription={setJobDescription}
-                    onUpload={handleUpload}
-                    onAnalyze={handleAnalyze}
-                    isUploading={isUploading}
-                />
+                <section className="dashboard-grid">
 
-                {message && (
-                    <p className="message">
-                        {message}
-                    </p>
-                )}
+                    <div className="dashboard-card">
+                        <h3>New Job Analysis</h3>
+
+                        <p>
+                            Compare your resume with a target job
+                            and discover your match score.
+                        </p>
+
+                        <button
+                            className="action-button"
+                            onClick={() =>
+                                navigate("/new-analysis")
+                            }
+                        >
+                            Start Analysis
+                        </button>
+                    </div>
+
+                    <div className="dashboard-card">
+                        <h3>Career Gap Analysis</h3>
+
+                        <p>
+                            Identify the skills you need to develop
+                            for your target role.
+                        </p>
+
+                        <button
+                            className="action-button"
+                            onClick={() =>
+                                navigate("/gap-analysis")
+                            }
+                        >
+                            View Gap Analysis
+                        </button>
+                    </div>
+
+                    <div className="dashboard-card">
+                        <h3>Career Roadmap</h3>
+
+                        <p>
+                            Follow a personalized learning roadmap
+                            based on your skill gaps.
+                        </p>
+
+                        <button
+                            className="action-button"
+                            onClick={() =>
+                                navigate("/roadmap")
+                            }
+                        >
+                            View Roadmap
+                        </button>
+                    </div>
+
+                    <div className="dashboard-card">
+                        <h3>Resume Improvement</h3>
+
+                        <p>
+                            Get suggestions to improve your resume
+                            for your target role.
+                        </p>
+
+                        <button
+                            className="action-button"
+                            onClick={() =>
+                                navigate("/resume-improvement")
+                            }
+                        >
+                            Improve Resume
+                        </button>
+                    </div>
+
+                </section>
 
                 {analysis && (
-                    <AnalysisResult
-                        analysis={analysis}
-                        onGapAnalysis={handleGapAnalysis}
-                    />
-                )}
+                    <section className="latest-analysis">
 
-                {gapAnalysis && (
-                    <GapAnalysis
-                        gapAnalysis={gapAnalysis}
-                    />
-                )}
+                        <div>
+                            <h2>Latest Analysis</h2>
 
-                <div className="analysis-actions">
+                            <p>
+                                {analysis.job_title}
+                            </p>
+                        </div>
 
-                    {analysis && (
+                        <div className="latest-score">
+                            <strong>
+                                {analysis.match_score}%
+                            </strong>
+
+                            <span>
+                                Match Score
+                            </span>
+                        </div>
+
                         <button
                             className="action-button"
-                            onClick={handleRoadmap}
+                            onClick={() =>
+                                navigate("/analysis")
+                            }
                         >
-                            Generate 14-Day Career Roadmap
+                            View Analysis
                         </button>
-                    )}
 
-                    {analysis && (
-                        <button
-                            className="action-button"
-                            onClick={handleResumeImprovement}
-                        >
-                            View Resume Improvement Suggestions
-                        </button>
-                    )}
-
-                </div>
-
-                {roadmap && (
-                    <Roadmap roadmap={roadmap} />
-                )}
-
-                {resumeImprovement && (
-                    <ResumeImprovement
-                        improvements={resumeImprovement}
-                    />
+                    </section>
                 )}
 
             </main>

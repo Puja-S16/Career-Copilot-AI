@@ -19,6 +19,10 @@ function Navigation() {
                     Dashboard
                 </NavLink>
 
+                <NavLink to="/new-analysis">
+                    New Analysis
+                </NavLink>
+
                 <NavLink to="/analysis">
                     Analysis
                 </NavLink>

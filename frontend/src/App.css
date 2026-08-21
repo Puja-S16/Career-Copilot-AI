@@ -609,3 +609,78 @@
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+/* =========================
+   DASHBOARD OVERVIEW
+========================= */
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+}
+
+.dashboard-card {
+    padding: 24px;
+
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+}
+
+.dashboard-card h3 {
+    margin-bottom: 8px;
+}
+
+.dashboard-card p {
+    margin-bottom: 18px;
+    line-height: 1.6;
+}
+
+.latest-analysis {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+
+    padding: 24px;
+
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+}
+
+.latest-analysis h2 {
+    margin-bottom: 4px;
+}
+
+.latest-analysis p {
+    margin: 0;
+}
+
+.latest-score {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.latest-score strong {
+    font-size: 30px;
+    color: var(--primary);
+}
+
+.latest-score span {
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+@media (max-width: 700px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .latest-analysis {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
