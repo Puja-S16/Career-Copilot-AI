@@ -1,79 +1,91 @@
 import { useState } from "react";
 import {
-  BrowserRouter,
-  Navigate,
-  Route,
-  Routes,
+    BrowserRouter,
+    Routes,
+    Route,
+    Navigate,
 } from "react-router-dom";
+
+import "./App.css";
 
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
+import NewAnalysis from "./pages/NewAnalysis";
 import Analysis from "./pages/Analysis";
 import GapAnalysisPage from "./pages/GapAnalysisPage";
 import RoadmapPage from "./pages/RoadmapPage";
 import ResumeImprovementPage from "./pages/ResumeImprovementPage";
-import NewAnalysis from "./pages/NewAnalysis";
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(
-    !!localStorage.getItem("access_token")
-  );
-
-  if (!isLoggedIn) {
-    return (
-      <Login
-        onLogin={() => setIsLoggedIn(true)}
-      />
+    const [isLoggedIn, setIsLoggedIn] = useState(
+        !!localStorage.getItem("access_token")
     );
-  }
 
-  return (
-    <BrowserRouter>
-      <Routes>
-
-        <Route
-          path="/dashboard"
-          element={<Dashboard />}
-        />
-
-        <Route
-          path="/"
-          element={
-            <Navigate
-              to="/dashboard"
-              replace
+    if (!isLoggedIn) {
+        return (
+            <Login
+                onLogin={() => setIsLoggedIn(true)}
             />
-          }
-        />
+        );
+    }
 
-        <Route
-          path="/analysis"
-          element={<Analysis />}
-        />
+    return (
+        <BrowserRouter>
+            <Routes>
 
-        <Route
-          path="/gap-analysis"
-          element={<GapAnalysisPage />}
-        />
+                <Route
+                    path="/"
+                    element={
+                        <Navigate
+                            to="/dashboard"
+                            replace
+                        />
+                    }
+                />
 
-        <Route
-          path="/roadmap"
-          element={<RoadmapPage />}
-        />
+                <Route
+                    path="/dashboard"
+                    element={<Dashboard />}
+                />
 
-        <Route
-          path="/resume-improvement"
-          element={<ResumeImprovementPage />}
-        />
+                <Route
+                    path="/new-analysis"
+                    element={<NewAnalysis />}
+                />
 
-        <Route
-          path="/new-analysis"
-          element={<NewAnalysis />}
-        />
+                <Route
+                    path="/analysis"
+                    element={<Analysis />}
+                />
 
-      </Routes>
-    </BrowserRouter>
-  );
+                <Route
+                    path="/gap-analysis"
+                    element={<GapAnalysisPage />}
+                />
+
+                <Route
+                    path="/roadmap"
+                    element={<RoadmapPage />}
+                />
+
+                <Route
+                    path="/resume-improvement"
+                    element={<ResumeImprovementPage />}
+                />
+
+                <Route
+                    path="*"
+                    element={
+                        <Navigate
+                            to="/dashboard"
+                            replace
+                        />
+                    }
+                />
+
+            </Routes>
+        </BrowserRouter>
+    );
 }
 
 export default App;

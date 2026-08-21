@@ -27,6 +27,15 @@ function Analysis() {
                         Analyze your resume against a target job
                     </p>
                 </div>
+
+                <button
+                    className="action-button"
+                    onClick={() =>
+                        navigate("/new-analysis")
+                    }
+                >
+                    New Analysis
+                </button>
             </header>
 
             <Navigation />
@@ -35,22 +44,51 @@ function Analysis() {
 
                 {!analysis ? (
                     <section className="welcome-card">
+
                         <h2>No Analysis Available</h2>
 
                         <p>
-                            Please analyze a job from the Dashboard
-                            first.
+                            Please analyze a job from the
+                            New Analysis page first.
                         </p>
 
                         <button
                             className="action-button"
-                            onClick={() => navigate("/dashboard")}
+                            onClick={() =>
+                                navigate("/new-analysis")
+                            }
                         >
-                            Go to Dashboard
+                            Start New Analysis
                         </button>
+
                     </section>
                 ) : (
                     <>
+                        <section className="analysis-context">
+
+                            <div>
+                                <span className="context-label">
+                                    Target Role
+                                </span>
+
+                                <h2>
+                                    {analysis.job_title ||
+                                        "Target Job"}
+                                </h2>
+                            </div>
+
+                            <div className="context-score">
+                                <span className="context-label">
+                                    Match Score
+                                </span>
+
+                                <strong>
+                                    {analysis.match_score}%
+                                </strong>
+                            </div>
+
+                        </section>
+
                         <AnalysisResult
                             analysis={analysis}
                             onGapAnalysis={() =>
@@ -62,7 +100,9 @@ function Analysis() {
 
                             <button
                                 className="action-button"
-                                onClick={() => navigate("/roadmap")}
+                                onClick={() =>
+                                    navigate("/roadmap")
+                                }
                             >
                                 View Career Roadmap
                             </button>
@@ -70,7 +110,9 @@ function Analysis() {
                             <button
                                 className="action-button"
                                 onClick={() =>
-                                    navigate("/resume-improvement")
+                                    navigate(
+                                        "/resume-improvement"
+                                    )
                                 }
                             >
                                 View Resume Improvements

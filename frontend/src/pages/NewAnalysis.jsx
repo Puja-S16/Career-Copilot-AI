@@ -91,6 +91,9 @@ function NewAnalysis() {
         }
     };
 
+    const hasJobDetails =
+        jobTitle.trim() && jobDescription.trim();
+
     return (
         <div className="dashboard">
 
@@ -106,6 +109,83 @@ function NewAnalysis() {
             <Navigation />
 
             <main className="dashboard-content">
+
+                <section className="analysis-steps">
+
+                    {/* Step 1 */}
+                    <div
+                        className={
+                            resumeId
+                                ? "analysis-step completed"
+                                : "analysis-step active"
+                        }
+                    >
+                        <span>
+                            {resumeId ? "✓" : "1"}
+                        </span>
+
+                        <div>
+                            <strong>
+                                Upload Resume
+                            </strong>
+
+                            <p>
+                                Select your latest resume.
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Step 2 */}
+                    <div
+                        className={
+                            hasJobDetails
+                                ? "analysis-step completed"
+                                : resumeId
+                                    ? "analysis-step active"
+                                    : "analysis-step"
+                        }
+                    >
+                        <span>
+                            {hasJobDetails ? "✓" : "2"}
+                        </span>
+
+                        <div>
+                            <strong>
+                                Enter Job Details
+                            </strong>
+
+                            <p>
+                                Add the target job title
+                                and description.
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Step 3 */}
+                    <div
+                        className={
+                            isAnalyzing || hasJobDetails
+                                ? "analysis-step active"
+                                : "analysis-step"
+                        }
+                    >
+                        <span>3</span>
+
+                        <div>
+                            <strong>
+                                {isAnalyzing
+                                    ? "Analyzing Match..."
+                                    : "Analyze Match"}
+                            </strong>
+
+                            <p>
+                                Get your career match
+                                and skill gaps.
+                            </p>
+                        </div>
+                    </div>
+
+                </section>
 
                 <JobAnalysisForm
                     resume={resume}
